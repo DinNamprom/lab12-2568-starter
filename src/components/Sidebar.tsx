@@ -1,4 +1,5 @@
 import { NavLink as RouterNavLink } from "react-router-dom";
+
 import {
   NavLink,
   Stack,
@@ -12,8 +13,8 @@ interface SidebarComponentProps  {
   userName: string;
   type?: "admin" |"student";
 }
-export type { SidebarProps };
-export default function Sidebar() {
+export type { SidebarComponentProps };
+export default function Sidebar({userName, type}: SidebarComponentProps) {
   return (
     <Stack
       align="stretch"
@@ -42,9 +43,12 @@ export default function Sidebar() {
         </Text> */}
       </Box>
       {/* แสดงผู้ใช้งาน */}
-      <Box p={10}>
-        <Text>chanadda</Text>
-      </Box>
+      <Group p={10} > 
+        <Indicator color="red" position="bottom-start">
+          <Avatar src={"https://pm1.aminoapps.com/7211/1defb95af8f13c7788ee412dfc4173e2ccff9b04r1-500-429v2_hq.jpg"} radius={"xl"} size={"md"}/>
+        </Indicator>
+        <Text component={RouterNavLink} to="/">User: {userName}: {type} </Text>
+      </Group>
     </Stack>
   );
 }

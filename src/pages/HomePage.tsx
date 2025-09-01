@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { IconTrashFilled } from "@tabler/icons-react";
 import {
   Container,
   Title,
@@ -10,7 +11,6 @@ import {
   Checkbox,
   ActionIcon,
 } from "@mantine/core";
-import { IconTrash } from "@tabler/icons-react";
 import { LoremIpsum } from "lorem-ipsum";
 import { randomId } from "@mantine/hooks";
 import { v4 as uuidv4 } from "uuid";
@@ -20,6 +20,7 @@ interface Task {
   description: string;
   isDone: boolean;
   dueDate: Date | null;
+  doneAt: Date | null;
 }
 
 export default function HomePage() {
@@ -30,6 +31,7 @@ export default function HomePage() {
       description: "Vite + React + Mantine + TS",
       isDone: false,
       dueDate: new Date(),
+      doneAt: null
     },
     {
       id: "2",
@@ -37,6 +39,7 @@ export default function HomePage() {
       description: "Finish project for class",
       isDone: false,
       dueDate: new Date(),
+      doneAt: null
     },
     {
       id: "3",
@@ -44,6 +47,7 @@ export default function HomePage() {
       description: "Push project to GitHub Pages",
       isDone: false,
       dueDate: new Date(),
+      doneAt: null
     },
   ]);
   const lorem = new LoremIpsum({
@@ -64,6 +68,7 @@ export default function HomePage() {
       description: lorem.generateWords(10),
       isDone: false,
       dueDate: new Date(),
+      doneAt: null
     };
     setTasks((prev) => [...prev, newTask]);
   };
@@ -76,7 +81,8 @@ export default function HomePage() {
   // Toggle done
   const toggleDoneTask = (taskId: string) => {
     setTasks((prev) =>
-      prev.map((t) => (t.id === taskId ? { ...t, isDone: !t.isDone } : t))
+      prev.map((t) => (t.id === taskId ? { ...t, isDone: !t.isDone, doneAt: !t.isDone? new Date() : null } : t))
+
     );
   };
 
@@ -112,31 +118,35 @@ export default function HomePage() {
                     </Text>
                   )}
                   {/* แสดง Date & Time */}
-                  <Text size="xs" c="gray">
-                    Done at:
-                  </Text>
+                  {task.isDone && task.doneAt && (
+                    <Text size="xs" c="chanadda">
+                      Done at: {task.doneAt.toLocaleString('en-US', {
+                        month: 'numeric',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true,
+                      })}
+                    </Text>
+                  )}
                 </Stack>
                 {/* แสดง Button Done & Button Delete */}
                 <Group>
-                  <Button
-                    style={{
-                      backgroundColor: "#71c32fda",
-                      color: "#dce6e7ff",
-                    }}
-                    variant="light"
-                    size="xs"
-                    onClick={() => toggleDoneTask(task.id)}
-                  >
-                    Done
-                  </Button>
-                  <Button
-                    color="chanadda"
-                    variant="light"
-                    size="xs"
+                  <Checkbox
+                    checked={task.isDone}
+                    onChange={() => toggleDoneTask(task.id)}
+                    label="Done"
+                  />
+                  <ActionIcon
+                    variant="gradient"
+                    gradient={{ from: 'red', to: 'rgba(51, 0, 0, 1)', deg: 197 }}
                     onClick={() => deleteTask(task.id)}
+                    size="md"
                   >
-                    Delete
-                  </Button>
+                    <IconTrashFilled size={14} />
+                  </ActionIcon>
                 </Group>
               </Group>
             </Card>

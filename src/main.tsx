@@ -10,8 +10,8 @@ const theme = createTheme({
   colors: {
     chanadda: virtualColor({
       name: "chanadda",
-      dark: "pink",
-      light: "cyan",
+      dark: "orange",
+      light: "violet",
     }),
   },
 });
